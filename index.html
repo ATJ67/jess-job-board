@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Jess's Job Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#F7F5F7; --surface:#FFFFFF; --ink:#22182A; --ink-soft:#64596D; --ink-faint:#958B9C;
+  --line:#E9E3EA; --line-soft:#F1EDF2;
+  --accent:#A3245A; --accent-deep:#7E1A45; --accent-wash:#F8E7EE;
+  --hy-txt:#1D4ED8; --hy-bg:#E2EBFD;
+  --re-txt:#12693A; --re-bg:#D9F2E2;
+  --of-txt:#92600A; --of-bg:#FBEFD4;
+  --rc-txt:#5B3B9E; --rc-bg:#ECE6FA;
+  --old-txt:#8A4B12; --old-bg:#FBE9D9;
+  --star:#D99A1E;
+  --shadow:0 1px 2px rgba(34,24,42,.05);
+  --display:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;
+  --body:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#141017; --surface:#1D1822; --ink:#F1ECF3; --ink-soft:#B3A8BA; --ink-faint:#83788A;
+  --line:#2F2836; --line-soft:#26202C;
+  --accent:#E46A9B; --accent-deep:#F08DB5; --accent-wash:#3A1D2B;
+  --hy-txt:#9DBBFB; --hy-bg:#1E2A47; --re-txt:#84DBA6; --re-bg:#163325;
+  --of-txt:#EFC46D; --of-bg:#3A2D12; --rc-txt:#C4B1F4; --rc-bg:#2B2245;
+  --old-txt:#F0B07A; --old-bg:#3B2516; --star:#F2C14E; --shadow:none;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#141017; --surface:#1D1822; --ink:#F1ECF3; --ink-soft:#B3A8BA; --ink-faint:#83788A;
+  --line:#2F2836; --line-soft:#26202C;
+  --accent:#E46A9B; --accent-deep:#F08DB5; --accent-wash:#3A1D2B;
+  --hy-txt:#9DBBFB; --hy-bg:#1E2A47; --re-txt:#84DBA6; --re-bg:#163325;
+  --of-txt:#EFC46D; --of-bg:#3A2D12; --rc-txt:#C4B1F4; --rc-bg:#2B2245;
+  --old-txt:#F0B07A; --old-bg:#3B2516; --star:#F2C14E; --shadow:none;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5;margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:28px 56px}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+.eyebrow{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:600;font-size:32px;line-height:1.1;margin:6px 0 6px;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--ink-soft);margin:0;max-width:62ch}
+.stamp{font-size:12.5px;color:var(--ink-soft);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;white-space:nowrap}
+.stamp b{color:var(--ink);font-weight:600}
+
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.stat{flex:1 1 140px;min-width:0;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);font:inherit;color:inherit;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.stat:hover{border-color:var(--ink-faint)}
+.stat[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.stat .n{font-family:var(--display);font-weight:600;font-size:30px;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.stat .l{margin-top:8px;font-size:12px;font-weight:500;color:var(--ink-soft)}
+.stat.plain .n{color:var(--ink)}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:18px}
+.search{flex:1 1 240px;min-width:0;position:relative}
+.search input{width:100%;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px 10px 36px}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--ink-faint)}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{font:inherit;font-size:13px;font-weight:500;color:var(--ink-soft);background:none;border:0;border-radius:7px;padding:6px 11px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent-wash);color:var(--accent-deep)}
+.chk{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);cursor:pointer;user-select:none}
+.chk input{accent-color:var(--accent);width:15px;height:15px}
+
+section.roles{margin-top:30px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px}
+.sec-head h2{font-family:var(--display);font-weight:600;font-size:21px;margin:0;display:flex;align-items:baseline;gap:10px}
+.sec-head .tag{font-family:var(--body);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint)}
+.sec-head .count{font-size:13px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.list{display:grid;gap:8px;margin-top:12px}
+.empty{color:var(--ink-faint);font-size:13px;padding:18px 4px}
+
+.role{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:14px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.role.starred{border-color:color-mix(in srgb,var(--star) 55%,var(--line))}
+.logo{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:.02em}
+.agency{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:13px;color:var(--ink-soft)}
+.agency b{color:var(--ink);font-weight:600;font-size:13.5px}
+.type{font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--ink-faint);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.title{font-family:var(--display);font-weight:600;font-size:16.5px;line-height:1.3;margin:3px 0 7px;text-wrap:balance}
+.title a{color:var(--ink);text-decoration:none}
+.title a:hover{color:var(--accent);text-decoration:underline}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:13px;color:var(--ink-soft)}
+.meta .money{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 9px 3px 7px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:99px;background:currentColor;opacity:.8}
+.pill.Hybrid{color:var(--hy-txt);background:var(--hy-bg)}
+.pill.Remote{color:var(--re-txt);background:var(--re-bg)}
+.pill.Office{color:var(--of-txt);background:var(--of-bg)}
+.pill.rec{color:var(--rc-txt);background:var(--rc-bg)}
+.pill.old{color:var(--old-txt);background:var(--old-bg)}
+.pill.closing{color:#fff;background:var(--accent)}
+.note{margin:8px 0 0;font-size:13px;color:var(--ink-soft);max-width:72ch}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.posted{font-size:12px;color:var(--ink-faint);white-space:nowrap;font-variant-numeric:tabular-nums}
+.btns{display:flex;gap:6px}
+.go{font:inherit;font-size:13px;font-weight:600;text-decoration:none;color:#fff;background:var(--accent);border-radius:9px;padding:7px 12px;white-space:nowrap}
+.go:hover{background:var(--accent-deep)}
+.starbtn{font:inherit;background:var(--surface);border:1px solid var(--line);border-radius:9px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-faint)}
+.starbtn[aria-pressed="true"]{color:var(--star);border-color:var(--star)}
+.src{font-size:11.5px;color:var(--ink-faint)}
+
+details.screened{margin-top:36px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 18px}
+details.screened summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 0;font-family:var(--display);font-weight:600;font-size:17px}
+details.screened summary::-webkit-details-marker{display:none}
+details.screened summary .hint{font-family:var(--body);font-weight:500;font-size:12.5px;color:var(--ink-soft)}
+.groups{display:grid;gap:18px;padding:4px 0 18px}
+.group h3{margin:0 0 4px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.group p{margin:0 0 8px;font-size:12.5px;color:var(--ink-faint)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;color:var(--ink);text-decoration:none;background:var(--bg)}
+a.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip small{color:var(--ink-faint);margin-left:4px}
+
+footer{margin-top:26px;font-size:12.5px;color:var(--ink-faint);display:grid;gap:6px;max-width:80ch}
+
+@media (max-width:640px){
+  h1{font-size:27px}
+  .role{grid-template-columns:36px minmax(0,1fr);gap:12px}
+  .logo{width:36px;height:36px;font-size:13px}
+  .side{grid-column:1 / -1;flex-direction:row;align-items:center;justify-content:space-between}
+  .stat{flex:1 1 calc(50% - 5px)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Medical communications &amp; medical education</div>
+      <h1>Jess's Job Board</h1>
+      <p class="sub">Senior Account Manager and Account Manager roles at healthcare agencies in or near London, plus UK roles that can be done remotely. Shortlisted for a South East London commute.</p>
+    </div>
+    <div class="stamp">Agencies screened <b>23 Oct 2026</b></div>
+  </header>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="toolbar">
+    <label class="search" for="q">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search agency, therapy area, publications, med ed…" autocomplete="off">
+    </label>
+    <div class="seg" role="group" aria-label="Working pattern" id="modeSeg">
+      <button type="button" data-mode="all" aria-pressed="true">All</button>
+      <button type="button" data-mode="Hybrid">Hybrid</button>
+      <button type="button" data-mode="Remote">Remote option</button>
+    </div>
+    <div class="seg" role="group" aria-label="Source" id="srcSeg">
+      <button type="button" data-src="all" aria-pressed="true">All sources</button>
+      <button type="button" data-src="agency">Agency direct</button>
+      <button type="button" data-src="recruiter">Via recruiter</button>
+    </div>
+    <label class="chk" for="hideOld"><input type="checkbox" id="hideOld"> Hide listings over 2 months old</label>
+  </div>
+
+  <section class="roles" aria-labelledby="h-sam">
+    <div class="sec-head">
+      <h2 id="h-sam"><span class="tag">Section 1</span> Senior Account Manager roles</h2>
+      <span class="count" id="c-sam"></span>
+    </div>
+    <div class="list" id="l-sam"></div>
+  </section>
+
+  <section class="roles" aria-labelledby="h-am">
+    <div class="sec-head">
+      <h2 id="h-am"><span class="tag">Section 2</span> Account Manager roles</h2>
+      <span class="count" id="c-am"></span>
+    </div>
+    <div class="list" id="l-am"></div>
+  </section>
+
+  <details class="screened" id="screened">
+    <summary>Agencies screened <span class="hint" id="screenHint"></span></summary>
+    <div class="groups" id="groups"></div>
+  </details>
+
+  <footer>
+    <div>Every role was checked against the agency's own careers system or its live listing on 23 Oct 2026. Salaries are shown only where the advert states one.</div>
+    <div>Left out: roles that are remote only for US or Canada residents (Ashfield MedComms, Real Chemistry US, Precision AQ, Prime Canada), and pharma field-sales "Key Account Manager" roles.</div>
+    <div>Recruiter listings don't name the agency. Apply through the recruiter to find out who it is.</div>
+    <div>Starred roles are saved in this browser only.</div>
+  </footer>
+</div>
+
+<script>
+const TODAY = new Date("2026-10-23T12:00:00");
+
+const ROLES = [
+  /* ---------------- Senior Account Manager ---------------- */
+  { s:"sam", agency:"Real Chemistry", type:"MedComms", title:"Senior Account Manager (Medical Education)", loc:"London or Manchester", mode:"Hybrid", modeNote:"2 office days a week", pay:"", posted:"2026-10-20", src:"agency",
+    note:"Lead client contact on medium to large med ed projects and coach juniors. Medical education experience is a must; integrated experience preferred.",
+    url:"https://job-boards.greenhouse.io/realchemistry/jobs/5456868008" },
+  { s:"sam", agency:"Klick Health", type:"Health advertising", title:"Senior Account Manager", loc:"London", mode:"Hybrid", modeNote:"London office", pay:"", posted:"2026-10-13", src:"agency",
+    note:"Day-to-day delivery on UK healthcare and life sciences accounts: timelines, scopes, budgets and regulatory review.",
+    url:"https://uk.linkedin.com/jobs/view/senior-account-manager-at-klick-4478146024" },
+  { s:"sam", agency:"Accenture Song Life", type:"MedComms", title:"Medical Communications Senior Account Manager", loc:"London", mode:"Hybrid", modeNote:"London office", pay:"Salary + bonus", posted:"2026-10-12", src:"agency",
+    note:"Song Life is Accenture's healthcare comms team of scientists, strategists and creatives. Competitive base, annual bonus and equity options.",
+    url:"https://uk.linkedin.com/jobs/view/medical-communications-senior-account-manager-at-accenture-uk-ireland-4477591669" },
+  { s:"sam", agency:"BOLDSCIENCE", type:"MedComms", title:"Senior Account Manager – Publications / Medical Affairs", loc:"UK-wide", mode:"Remote", modeNote:"Advertised UK-wide", pay:"", posted:"2026-10-09", src:"agency",
+    note:"Runs day-to-day client and team management on publications and medical affairs accounts, including timelines, budgets, forecasting and resourcing.",
+    url:"https://uk.linkedin.com/jobs/view/senior-account-manager-publications-medical-affairs-at-boldscience-4467737566" },
+  { s:"sam", agency:"Incisive Health (Inizio Evoke)", type:"Health policy", title:"Senior Account Manager – International Health Policy", loc:"London", mode:"Hybrid", modeNote:"Flexible, with team office days", pay:"", posted:"2026-10-07", src:"agency",
+    note:"Health policy, public affairs and comms programmes across UK, Europe and international markets. Part of Inizio.",
+    url:"https://www.inizioevoke.com/vacancy/inizioevoke/8261127?gh_jid=8261127" },
+  { s:"sam", agency:"Havas Life London", type:"Health advertising", title:"Senior Account Manager (Pharma Advertising)", loc:"Surrey", mode:"Hybrid", modeNote:"Surrey office", pay:"", posted:"2026-10-01", src:"agency",
+    note:"Works with medical writers and creatives on pharma projects and coaches junior client services staff. Part of Havas Health.",
+    url:"https://uk.linkedin.com/jobs/view/senior-account-manager-pharma-advertising-at-havas-life-london-4472800083" },
+  { s:"sam", agency:"Havas Lynx", type:"Health advertising", title:"Senior Account Manager", loc:"London", mode:"Hybrid", modeNote:"In office Mon, Tue, Thu", pay:"", posted:"2026-09-30", src:"agency",
+    note:"Healthcare advertising for pharma brands, HCPs and patients. 28 days' leave, early Friday finish.",
+    url:"https://uk.linkedin.com/jobs/view/senior-account-manager-at-havas-lynx-4473760583" },
+  { s:"sam", agency:"EVERSANA INTOUCH", type:"Health advertising", title:"Senior Account Manager", loc:"London", mode:"Hybrid", modeNote:"London office", pay:"", posted:"2026-09-14", src:"agency",
+    note:"Full-service healthcare agency network spanning creative, medical comms, market access and media.",
+    url:"https://uk.linkedin.com/jobs/view/senior-account-manager-at-eversana-intouch-4464777361" },
+  { s:"sam", agency:"Burson", type:"Healthcare PR", title:"Senior Account Manager / Account Director – Healthcare Communications", loc:"London (Southwark)", mode:"Office", modeNote:"About 4 office days a week", pay:"", posted:"2026-06-09", src:"agency",
+    note:"WPP's comms agency, based at the WPP Rose Court campus. The listing is still live but has been up since June.",
+    url:"https://uk.linkedin.com/jobs/view/senior-account-manager-account-director-healthcare-communications-at-burson-4419291440" },
+  { s:"sam", agency:"Evergreen PR", type:"Healthcare PR", title:"Senior Account Manager – Healthcare PR", loc:"UK", mode:"Remote", modeNote:"Fully remote (UK)", pay:"£45,000 + up to 10% bonus", posted:"2026-10-18", src:"agency",
+    note:"Leads 4–5 accounts across health tech, med tech, charities and private healthcare, working closely with the MD. £1,500 yearly learning budget.",
+    url:"https://uk.linkedin.com/jobs/view/senior-account-manager-healthcare-pr-at-evergreen-pr-4480896172" },
+  { s:"sam", agency:"Boutique healthcare consultancy", rec:"RBW Consulting", type:"Healthcare PR", title:"Senior Account Manager, Healthcare PR", loc:"Central London", mode:"Remote", modeNote:"Fully flexible: hybrid or remote", pay:"", posted:"2026-10-06", src:"recruiter",
+    note:"Independent agency covering PR, medical education and advocacy. European programmes on Alzheimer's and women's health.",
+    url:"https://uk.linkedin.com/jobs/view/senior-account-manager-healthcare-pr-at-rbw-consulting-4474050263" },
+  { s:"sam", agency:"Independent full-service agency", rec:"RBW Consulting", type:"Med Ed", title:"Senior Account Manager, Med Comms", loc:"Windsor, Berkshire", mode:"Hybrid", modeNote:"Berkshire office", pay:"", posted:"2026-09-28", src:"recruiter",
+    note:"Mid-size agency doing medical education, brand marketing and multichannel campaigns. A long commute from South East London.",
+    url:"https://uk.linkedin.com/jobs/view/senior-account-manager-med-comms-at-rbw-consulting-4470879552" },
+
+  /* ---------------- Account Manager ---------------- */
+  { s:"am", agency:"Madano", type:"MedComms", title:"Account Manager, Medical Communications (Healthcare)", loc:"London", mode:"Hybrid", modeNote:"At least 3 office days", pay:"£40,000–£43,000", posted:"2026-10-20", src:"agency",
+    note:"Top 10 UK healthcare comms consultancy with a fast-growing healthcare practice. Varied therapy areas. 25 days' leave, rising to 30.",
+    url:"https://job-boards.greenhouse.io/madano/jobs/5266295007" },
+  { s:"am", agency:"Nucleus Global (Inizio Medical)", type:"MedComms", title:"Account Manager – Publications & Medical Affairs", loc:"London or Manchester", mode:"Hybrid", modeNote:"Flexible hybrid", pay:"", posted:"2026-10-17", src:"agency",
+    note:"Projects across multiple therapy areas in publications and medical affairs. Private medical insurance and pension.",
+    url:"https://job-boards.greenhouse.io/nucleus/jobs/8055043" },
+  { s:"am", agency:"Nucleus Global (Inizio Medical)", type:"MedComms", title:"Account Manager – Global Medical Affairs", loc:"London, Manchester or UK remote", mode:"Remote", modeNote:"Hybrid or UK remote", pay:"", posted:"2026-10-17", src:"agency",
+    note:"Global medical affairs programmes: congress booths, standalone meetings and expert meetings.",
+    url:"https://job-boards.greenhouse.io/nucleus/jobs/8108428" },
+  { s:"am", agency:"Nucleus Global (Inizio Medical)", type:"MedComms", title:"Account Manager – Publications & Medical Affairs (Oncology)", loc:"London, Manchester or remote", mode:"Remote", modeNote:"Office, hybrid or remote", pay:"", posted:"2026-10-17", src:"agency",
+    note:"Oncology account, mainly breast cancer. Publications or medical affairs experience counts for more than oncology experience.",
+    url:"https://job-boards.greenhouse.io/nucleus/jobs/7962995" },
+  { s:"am", agency:"Real Chemistry", type:"MedComms", title:"Account Manager – Medical", loc:"London or Manchester", mode:"Hybrid", modeNote:"2 office days a week", pay:"", posted:"2026-10-15", src:"agency",
+    note:"Day-to-day client contact: status updates, client queries and recommendations, with support from an account lead.",
+    url:"https://job-boards.greenhouse.io/realchemistry/jobs/5216284008" },
+  { s:"am", agency:"AXON", type:"Healthcare PR", title:"Account Manager – Communications & Advocacy", loc:"London", mode:"Hybrid", modeNote:"London office", pay:"", posted:"2026-10-20", src:"agency",
+    note:"Global healthcare comms agency (London, Copenhagen, New York, Toronto). 5% employer pension and private medical and dental cover.",
+    url:"https://job-boards.greenhouse.io/axonag/jobs/5247018007" },
+  { s:"am", agency:"Portland", type:"Healthcare PR", title:"Account Manager – Healthcare & Life Sciences", loc:"London", mode:"Office", modeNote:"At least 3 office days", pay:"", posted:"2026-10-20", src:"agency",
+    note:"Advisory and comms for healthcare clients: policy roundtables, parliamentary events, media and digital campaigns. Part of Omnicom.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-at-portland-4471560598" },
+  { s:"am", agency:"Havas Lynx", type:"Health advertising", title:"Account Manager", loc:"London", mode:"Hybrid", modeNote:"In office Mon, Tue, Thu", pay:"", posted:"2026-10-19", src:"agency",
+    note:"Healthcare advertising for pharma brands. More than 400 staff across London and Manchester.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-at-havas-lynx-4469911422" },
+  { s:"am", agency:"TW1 Healthcare Consulting", type:"MedComms", title:"Account Manager", loc:"UK", mode:"Remote", modeNote:"Fully remote, home based", pay:"", posted:"2026-10-16", closes:"2026-10-23", src:"agency",
+    note:"Remote medcomms account management with flexible hours. The advert closes today, 23 October.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-at-tw1-healthcare-consulting-4480341870" },
+  { s:"am", agency:"ZPB Associates", type:"Healthcare PR", title:"Account Manager – Insight and Strategy", loc:"London", mode:"Hybrid", modeNote:"London office", pay:"£35,000–£40,000", posted:"2026-10-13", src:"agency",
+    note:"Healthcare strategy and comms firm (NHS, independent healthcare, digital health). The role leads research and insight work.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-insight-and-strategy-at-zpb-associates-4465997080" },
+  { s:"am", agency:"Accenture Song Life", type:"MedComms", title:"Medical Communications Account Manager", loc:"London", mode:"Hybrid", modeNote:"London office", pay:"Salary + bonus", posted:"2026-10-12", src:"agency",
+    note:"Accenture's healthcare comms team. Competitive base, annual bonus and equity options.",
+    url:"https://uk.linkedin.com/jobs/view/medical-communications-account-manager-at-accenture-uk-ireland-4477296308" },
+  { s:"am", agency:"Havas Life London", type:"Health advertising", title:"Account Manager (Pharma Advertising)", loc:"Surrey", mode:"Hybrid", modeNote:"Surrey office", pay:"", posted:"2026-10-06", src:"agency",
+    note:"Pharma and healthcare creative agency in the Havas Health network.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-pharma-advertising-at-havas-life-london-4474928725" },
+  { s:"am", agency:"Envision Pharma Group", type:"MedComms", title:"Account Manager, Publications", loc:"UK", mode:"Hybrid", modeNote:"Advertised UK-wide", pay:"", posted:"2026-09-30", src:"agency",
+    note:"Fast-growing account across neuroscience, immunology and oncology. Publications experience is essential (iEnvision a plus).",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-publications-at-envision-pharma-group-4464095652" },
+  { s:"am", agency:"Bioscript Group", type:"MedComms", title:"Account Manager (MedComms)", loc:"London or Macclesfield", mode:"Remote", modeNote:"Hybrid or remote", pay:"", posted:"2026-09-23", src:"agency",
+    note:"Two openings: one permanent and one 12-month fixed-term contract. 25 days' leave plus a winter shutdown.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-at-bioscript-group-4463491402" },
+  { s:"am", agency:"Burson", type:"Healthcare PR", title:"Account Manager – Healthcare Communications", loc:"London (Southwark)", mode:"Office", modeNote:"About 4 office days a week", pay:"", posted:"2026-08-18", src:"agency",
+    note:"WPP's comms agency with 450 people in its Southwark office.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-healthcare-communications-at-burson-4445038604" },
+  { s:"am", agency:"Independent medcomms agency", rec:"Albion Rye Associates", type:"MedComms", title:"Account Manager – Medical Communications", loc:"London or UK remote", mode:"Remote", modeNote:"Hybrid London or remote UK", pay:"Salary + bonus", posted:"2026-10-20", src:"recruiter",
+    note:"Growing independent agency on global and regional pharma accounts. Known for a supportive culture.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-medical-communications-at-albion-rye-associates-4478676876" },
+  { s:"am", agency:"Growing medcomms agency", rec:"CLR Health", type:"Med Ed", title:"Account Manager – Medical Affairs / Med Ed (12-month FTC)", loc:"London", mode:"Remote", modeNote:"Hybrid or remote", pay:"", posted:"2026-10-22", src:"recruiter",
+    note:"12-month fixed-term contract. Oncology, advisory boards, congresses and multichannel experience would help. Publications experience is optional.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-hybrid-remote-med-ed-12mth-ftc-at-clr-health-ltd-4480939931" },
+  { s:"am", agency:"Healthcare agency", rec:"Assignment Consulting", type:"Health advertising", title:"Account Manager – Healthcare Marketing", loc:"London", mode:"Hybrid", modeNote:"Hybrid", pay:"", posted:"2026-10-23", src:"recruiter",
+    note:"Covers medical and promotional work. Experience with leave pieces and websites is essential.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-healthcare-marketing-at-assignment-consulting-4482864913" },
+  { s:"am", agency:"Omnichannel medcomms agency", rec:"pobl.", type:"MedComms", title:"Senior Account Executive / Account Manager", loc:"Central London", mode:"Hybrid", modeNote:"1–2 office days a week", pay:"", posted:"2026-10-14", src:"recruiter",
+    note:"Omnichannel programmes for pharma and biotech: HCP websites, digital content, social media and congress amplification.",
+    url:"https://uk.linkedin.com/jobs/view/senior-account-executive-account-manager-at-pobl-4479519351" },
+  { s:"am", agency:"Medcomms agency", rec:"Life Sciences Recruitment", type:"MedComms", title:"Account Manager", loc:"London", mode:"Hybrid", modeNote:"Hybrid", pay:"", posted:"2026-10-14", src:"recruiter",
+    note:"Main client contact with input on RFP proposals and account growth. 5% employer pension and private medical cover for the family.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-at-life-sciences-recruitment-4479293420" },
+  { s:"am", agency:"Leading healthcare comms agency", rec:"RBW Consulting", type:"MedComms", title:"Account Manager, Medical Communications", loc:"London", mode:"Hybrid", modeNote:"Hybrid", pay:"", posted:"2026-09-29", src:"recruiter",
+    note:"Covers both medical affairs and publications, with support from senior colleagues.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-medical-communications-at-rbw-consulting-4471276622" },
+  { s:"am", agency:"Boutique healthcare PR agency", rec:"RBW Consulting", type:"Healthcare PR", title:"Account Manager", loc:"London", mode:"Hybrid", modeNote:"Flexible, no set office days", pay:"£35,000–£45,000", posted:"2026-10-20", src:"recruiter",
+    note:"Rare disease, patient comms, advocacy and influencer campaigns. Suits a newly promoted Account Manager.",
+    url:"https://uk.linkedin.com/jobs/view/account-manager-at-rbw-consulting-4478912027" },
+];
+
+const SCREENED = {
+  hiring: { label:"Hiring now (roles above)", hint:"These agencies have a matching role on the board.", items:[
+    "Real Chemistry","Nucleus Global (Inizio)","Incisive Health / Inizio Evoke","Madano","AXON","Havas Lynx","Havas Life London","Klick Health","EVERSANA INTOUCH","BOLDSCIENCE","Envision Pharma Group","Bioscript Group","Accenture Song Life","Burson","Portland","Evergreen PR","TW1 Healthcare Consulting","ZPB Associates"]},
+  none: { label:"Checked: no AM or SAM roles open right now", hint:"Their careers systems were read directly. The note shows what they are hiring for instead, where relevant.", items:[
+    ["Avalere Health","incl. Blue Latitude, Fishawack","https://avalerehealth.com/careers/"],
+    ["Ashfield MedComms","US remote only","https://job-boards.greenhouse.io/ashfieldmedcomms"],
+    ["ApotheCom","writers only","https://job-boards.greenhouse.io/apothecom"],
+    ["MEDiSTRAVA","","https://www.medistrava.com/careers/vacancies/"],
+    ["OPEN Health","","https://www.openhealthgroup.com/open-roles/"],
+    ["Oxford PharmaGenesis","AE, SAE & SAD only","https://careers.pharmagenesis.com/"],
+    ["Costello Medical","","https://apply.workable.com/costello-medical/"],
+    ["Lucid Group","","https://careers.wearelucidgroup.com/jobs"],
+    ["Ogilvy Health UK","SAE only","https://job-boards.greenhouse.io/ogilvyhealthuk"],
+    ["Prime","Canada only","https://apply.workable.com/primeglobalpeople-join-us/"],
+    ["Syneos Health Comms","","https://commercialcareers.syneoshealth.com/pages/communications"],
+    ["Omnicom Health","","https://interpublic.wd5.myworkdayjobs.com/OMC"],
+    ["Hanover","AE & AD only","https://hanovercomms.com/careers/vacancies"],
+    ["Publicis Health / Langland / Digitas Health","","https://www.publicisgroupeuk.com/careers/all-jobs/"],
+    ["M+F Health","","https://apply.workable.com/mf-health/"],
+    ["Lumanity","","https://lumanity.com/careers/working-at-lumanity/"],
+    ["Cogora","","https://www.cogora.com/careers/"],
+    ["Touch Medical Media","","https://touchmedicalmedia.com/careers/"],
+    ["Virgo Health","","https://virgohealth.com/careers/"],
+    ["FleishmanHillard","no health roles","https://fleishmanhillard.co.uk/"],
+    ["Weber Shandwick","","https://www.webershandwick.com/work-at-weber/careers/"],
+  ]},
+  manual: { label:"Worth checking by hand", hint:"London-area or remote-friendly agencies whose careers pages couldn't be read automatically. Tap one to open its site.", items:[
+    ["Synergy Vision","https://www.synergy-vision.com/careers/"],["Bedrock Healthcare Comms","https://bedrock-health.com/who/"],["AMICULUM","https://www.amiculum.biz/"],["Porterhouse Medical","https://www.porterhousemedical.com/careers/"],
+    ["Hamell","https://www.hamell.co.uk/"],["Tonic Life Communications","https://toniccomms.co.uk/"],["Spink Health","https://spinkhealth.com/"],["FHF London","https://fhflondon.co.uk/"],
+    ["Say Communications","https://saycomms.co.uk/"],["Hayward","https://www.hayward.co.uk/"],["Darwin Healthcare Comms","https://darwin-healthcare.com/"],["Helios","https://heliosglobalgroup.com/"],
+    ["Wave Healthcare","https://www.wavehealthcare.co.uk/"],["Page Medical","https://pagemedical.co.uk/"],["Alpharmaxim","https://alpharmaxim.com/"],["Green Room Health","https://www.greenroomhealth.co.uk/"],
+    ["Create Health","https://createhealth.com/"],["Wallace Health","https://www.wallacehealth.co.uk/"],["EPG Health","https://www.epghealth.com/"],["AS&K","https://asandk.com/"],
+    ["emotive","https://emotiveagency.com/careers"],["OneHealth","https://www.onehealthcomms.co.uk/careers/"],["Highfield","https://www.highfieldcommunication.com/careers/"],["Dice Medical Comms","https://www.dice-comms.co.uk/careers/"],
+    ["Red Health","https://www.redconsultancy.com/careers/"],["Ruder Finn","https://ruderfinn.com/careers"],["Finn Partners Health","https://www.finnpartners.com/careers/"],["Health Unlimited","https://www.healthunlimited.com/"],
+    ["Zeno Group","https://www.zenogroup.com/careers/"],["Springer Healthcare","https://springerhealthcare.com/"],["McCann Health / Caudex / CMC","https://www.omc.com/capabilities/capability-health/"],["Siren","https://www.sirencomms.com/"],
+    ["Mednet Group","https://www.mednethealth.com/"],["Mtech Access","https://www.mtechaccess.co.uk/"],["90TEN","https://www.90ten.co.uk/"],["67health","https://www.67health.co.uk/"],["11 London","https://www.11-london.com/"],
+  ]},
+};
+
+/* ---------- helpers ---------- */
+const PALETTE = ["#7E1A45","#2F5D8A","#0E7C7B","#6A4C93","#B3541E","#3D6B3A","#8A3B6E","#45506B","#A0522D","#1F6F8B"];
+function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)}
+function initials(n){const w=n.replace(/\([^)]*\)/g," ").replace(/&/g," ").split(/\s+/).filter(x=>x&&x!=="/");return w.length>1?(w[0][0]+w[1][0]).toUpperCase():w[0].slice(0,2).toUpperCase()}
+function days(iso){return Math.round((TODAY-new Date(iso+"T12:00:00"))/86400000)}
+function ago(iso){const d=days(iso);if(d<=0)return"Today";if(d===1)return"Yesterday";if(d<7)return d+" days ago";if(d<14)return"1 week ago";if(d<31)return Math.floor(d/7)+" weeks ago";const m=Math.round(d/30);return m+(m===1?" month ago":" months ago")}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+const key=r=>r.url;
+
+let starred=new Set();
+try{starred=new Set(JSON.parse(localStorage.getItem("jjb-stars")||"[]"))}catch(e){}
+function saveStars(){try{localStorage.setItem("jjb-stars",JSON.stringify([...starred]))}catch(e){}}
+
+const state={q:"",mode:"all",src:"all",hideOld:false,stat:null};
+try{const s=JSON.parse(localStorage.getItem("jjb-filters")||"{}");Object.assign(state,{mode:s.mode||"all",src:s.src||"all",hideOld:!!s.hideOld})}catch(e){}
+function saveFilters(){try{localStorage.setItem("jjb-filters",JSON.stringify({mode:state.mode,src:state.src,hideOld:state.hideOld}))}catch(e){}}
+
+function matches(r){
+  if(state.mode!=="all"&&r.mode!==state.mode)return false;
+  if(state.src!=="all"&&r.src!==state.src)return false;
+  if(state.hideOld&&days(r.posted)>60)return false;
+  if(state.stat==="new"&&days(r.posted)>7)return false;
+  if(state.stat==="star"&&!starred.has(key(r)))return false;
+  if(state.q){const q=state.q.toLowerCase();const hay=[r.agency,r.rec,r.type,r.title,r.loc,r.note,r.modeNote,r.pay].join(" ").toLowerCase();if(!hay.includes(q))return false}
+  return true;
+}
+
+function card(r){
+  const old=days(r.posted)>60, closing=r.closes;
+  const name=r.rec?r.rec:r.agency;
+  return `<article class="role${starred.has(key(r))?" starred":""}">
+    <div class="logo" style="background:${PALETTE[hash(name)%PALETTE.length]}" aria-hidden="true">${esc(initials(name))}</div>
+    <div>
+      <div class="agency"><b>${esc(r.agency)}</b>${r.rec?`<span class="src">via ${esc(r.rec)}</span>`:""}<span class="type">${esc(r.type)}</span></div>
+      <div class="title"><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.title)}</a></div>
+      <div class="meta">
+        <span class="pill ${r.mode}">${r.mode==="Remote"?"Remote option":r.mode==="Office"?"Mostly office":"Hybrid"}</span>
+        <span>${esc(r.loc)} · ${esc(r.modeNote)}</span>
+        ${r.pay?`<span class="money">${esc(r.pay)}</span>`:""}
+        ${r.src==="recruiter"?`<span class="pill rec">Recruiter</span>`:""}
+        ${closing?`<span class="pill closing">Closes today</span>`:""}
+        ${old?`<span class="pill old">Older listing</span>`:""}
+      </div>
+      <p class="note">${esc(r.note)}</p>
+    </div>
+    <div class="side">
+      <span class="posted">Posted ${ago(r.posted)}</span>
+      <div class="btns">
+        <button type="button" class="starbtn" data-star="${esc(key(r))}" aria-pressed="${starred.has(key(r))}" aria-label="${starred.has(key(r))?"Remove from shortlist":"Add to shortlist"}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="${starred.has(key(r))?"currentColor":"none"}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>
+        </button>
+        <a class="go" href="${esc(r.url)}" target="_blank" rel="noopener">View role</a>
+      </div>
+    </div>
+  </article>`;
+}
+
+function render(){
+  for(const s of ["sam","am"]){
+    const all=ROLES.filter(r=>r.s===s);
+    const rows=all.filter(matches).sort((a,b)=>(a.src===b.src?0:a.src==="agency"?-1:1)||b.posted.localeCompare(a.posted));
+    document.getElementById("l-"+s).innerHTML=rows.length?rows.map(card).join(""):`<div class="empty">No roles match these filters.</div>`;
+    document.getElementById("c-"+s).textContent=rows.length===all.length?`${all.length} roles`:`${rows.length} of ${all.length} roles`;
+  }
+  const agencies=new Set(ROLES.filter(r=>r.src==="agency").map(r=>r.agency.replace(/ \(.*\)/,"")));
+  const stats=[
+    {id:null,n:ROLES.length,l:"Open roles",plain:true},
+    {id:"new",n:ROLES.filter(r=>days(r.posted)<=7).length,l:"Posted this week"},
+    {id:"remote",n:ROLES.filter(r=>r.mode==="Remote").length,l:"Offer remote working"},
+    {id:"agencies",n:agencies.size,l:"Agencies hiring directly",plain:true},
+    {id:"star",n:ROLES.filter(r=>starred.has(key(r))).length,l:"On Jess's shortlist"},
+  ];
+  document.getElementById("stats").innerHTML=stats.map(s=>`<button type="button" class="stat${s.plain?" plain":""}" data-stat="${s.id||""}" aria-pressed="${(s.id&&(state.stat===s.id||(s.id==="remote"&&state.mode==="Remote")))?"true":"false"}"><div class="n">${s.n}</div><div class="l">${s.l}</div></button>`).join("");
+  document.querySelectorAll("#modeSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===state.mode));
+  document.querySelectorAll("#srcSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.src===state.src));
+  document.getElementById("hideOld").checked=state.hideOld;
+}
+
+function renderScreened(){
+  const g=SCREENED;
+  const total=g.hiring.items.length+g.none.items.length+g.manual.items.length;
+  document.getElementById("screenHint").textContent=`${total} agencies · tap to expand`;
+  document.getElementById("groups").innerHTML=
+    `<div class="group"><h3>${g.hiring.label} · ${g.hiring.items.length}</h3><p>${g.hiring.hint}</p><div class="chips">${g.hiring.items.map(n=>`<span class="chip">${esc(n)}</span>`).join("")}</div></div>`+
+    `<div class="group"><h3>${g.none.label} · ${g.none.items.length}</h3><p>${g.none.hint}</p><div class="chips">${g.none.items.map(([n,s,u])=>`<a class="chip" href="${esc(u)}" target="_blank" rel="noopener">${esc(n)}${s?`<small>${esc(s)}</small>`:""}</a>`).join("")}</div></div>`+
+    `<div class="group"><h3>${g.manual.label} · ${g.manual.items.length}</h3><p>${g.manual.hint}</p><div class="chips">${g.manual.items.map(([n,u])=>`<a class="chip" href="${esc(u)}" target="_blank" rel="noopener">${esc(n)}</a>`).join("")}</div></div>`;
+}
+
+document.addEventListener("click",e=>{
+  const st=e.target.closest("[data-star]");
+  if(st){const k=st.dataset.star;starred.has(k)?starred.delete(k):starred.add(k);saveStars();render();return}
+  const m=e.target.closest("#modeSeg button");
+  if(m){state.mode=m.dataset.mode;saveFilters();render();return}
+  const s=e.target.closest("#srcSeg button");
+  if(s){state.src=s.dataset.src;saveFilters();render();return}
+  const t=e.target.closest(".stat");
+  if(t){const id=t.dataset.stat;
+    if(id==="remote"){state.mode=state.mode==="Remote"?"all":"Remote";state.stat=null;saveFilters()}
+    else if(id==="new"||id==="star"){state.stat=state.stat===id?null:id}
+    else{state.stat=null;state.mode="all";state.src="all";state.q="";document.getElementById("q").value="";saveFilters()}
+    render();}
+});
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value.trim();render()});
+document.getElementById("hideOld").addEventListener("change",e=>{state.hideOld=e.target.checked;saveFilters();render()});
+
+render();renderScreened();
+</script>
+</body>
+</html>
